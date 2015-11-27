@@ -1,0 +1,243 @@
+{{ PkgFullIntro | safe }}
+
+{# START: Index #}
+{% if IsHasExports %}
+<h2 class="ui header" id="_index">
+	Index
+</h2>
+<ul class="unstyled">
+	{% if IsHasConst %}
+	<li>
+		<a href="#_constants">Constants</a>
+	</li>
+	{% endif %}
+
+	{% if IsHasVar %}
+	<li>
+		<a href="#_variables">Variables</a>
+	</li>
+	{% endif %}
+
+	{% for fn in Funcs %}
+	<li>
+		<a href="#{{fn.Name}}">{{fn.Decl}}</a>
+	</li>
+	{% endfor %}
+
+	{% for tp in Types %}
+	<li>
+		<a href="#{{tp.Name}}">type {{tp.Name}}</a>
+	</li>
+	<ul>
+		{% for fn in tp.Funcs %}
+		<li>
+			<a href="#{{fn.Name}}">{{fn.Decl}}</a>
+		</li>
+		{% endfor %}
+
+		{% for fn in tp.Methods %}
+		<li>
+			<a href="#{{tp.Name}}_{{fn.Name}}">{{fn.Decl}}</a>
+		</li>
+		{% endfor %}
+	</ul>
+	{% endfor %}
+</ul>
+{% endif %}
+
+{% macro example_detail(ex) %}
+<div class="ui collapse example">
+	<div>
+		<h3>
+			<a class="show example" id="_ex_btn_{{ex.Name}}" href="#_ex_{{ex.Name}}">Example({{ex.Name}})</a>
+		</h3>
+	</div>
+	<div id="_ex_{{ex.Name}}">
+		<p>Code:</p>
+		<pre>{{ex.Code | safe}}</pre>
+		{% if ex.Output %}
+		<p>Output:</p>
+		<pre>{{ex.Output}}</pre>
+		{% endif %}
+	</div>
+</div>
+{% endmacro %}
+
+{% if IsHasExample %}
+<h2 class="ui header" id="_exams">Examples</h2>
+<ul class="unstyled">
+	{% for ex in Examples %}
+		{% if ex.IsUsed %}
+		<li>
+			<a class="ex-link" href="#_ex_btn_{{ex.Name}}" data-name="#_ex_{{ex.Name}}">{{ex.Name}}</a>
+		</li>
+		{% else %}
+			{{example_detail(ex)}}
+		{% endif %}
+	{% endfor %}
+</ul>
+{% endif %}
+<b></b>
+{# END: Index #}
+
+{# START: Constants #}
+{% if IsHasConst %}
+<h2 class="ui header" id="_constants">Constants</h2>
+	{% for c in Consts %}
+		<pre>{{c.FmtDecl | safe}}</pre>
+		{{c.Doc | safe}}
+	{% endfor %}
+{% endif %}
+{# END: Constants #}
+
+{# START: Variables #}
+{% if IsHasVar %}
+<h2 class="ui header" id="_variables">Variables</h2>
+	{% for v in Vars %}
+		<pre>{{v.FmtDecl | safe}}</pre>
+		{{v.Doc | safe}}
+	{% endfor %}
+{% endif %}
+<b></b>
+{# END: Variables #}
+
+{% macro sg_link(name) %}
+	{% if HasPrefix(ProjectPath, "github.com") == True %}
+	<a class="ui button sg" target="_blank" href="https://sourcegraph.com/{{ProjectPath}}/.GoPackage/{{ImportPath}}/.def/{{name}}">
+  	<i class="icon asterisk"></i>
+	</a>
+	{% endif %}
+{% endmacro %}
+
+{# START: Functions #}
+{% for fn in Funcs %}
+	<h3 id="{{fn.Name}}">
+		func 
+		<a target="_blank" href="http{{Secure}}://{{fn.URL}}">{{fn.Name}}</a> 
+		<div class="mini icon ui basic buttons">
+			<div class="ui button show code" data-target="#collapse_{{fn.Name}}"><i class="code icon"></i></div>
+			{{sg_link(fn.Name)}}
+		</div>
+	</h3>
+	<div class="ui collapse">
+		<div>
+			<pre id="decl_{{fn.Name}}">{{fn.FmtDecl | safe}}</pre>
+		</div>
+		<div id="collapse_{{fn.Name}}">
+			<pre class="code">{{fn.Code | safe}}</pre>
+		</div>
+	</div>
+
+	{{fn.Doc | safe}}
+
+	{% for ex in fn.Examples %}
+		{{example_detail(ex)}}
+	{% endfor %}
+{% endfor %}
+<b></b>
+{# END: Functions #}
+
+{# START: Types #}
+{% for tp in Types %}
+	<h3 id="{{tp.Name}}">
+		type 
+		<a target="_blank" href="http{{Secure}}://{{tp.URL}}">{{tp.Name}}</a>
+		<div class="mini icon ui basic buttons">
+			{{sg_link(tp.Name)}}
+		</div>
+	</h3>
+
+	<pre>{{tp.FmtDecl | safe}}</pre>
+
+	{{tp.Doc | safe}}
+
+	{% for ex in tp.Examples %}
+		{{example_detail(ex)}}
+	{% endfor %}
+
+	{# START: Types.Constants #}
+	{% for c in tp.Consts %}
+		<pre>{{c.FmtDecl | safe}}</pre>
+		{{c.Doc | safe}}
+	{% endfor %}
+	{# END: Types.Constants #}
+
+	{# START: Types.Variables #}
+	{% for v in tp.Vars %}
+		<pre>{{v.FmtDecl | safe}}</pre>
+		{{v.Doc | safe}}
+	{% endfor %}
+	<b></b>
+	{# END: Types.Variables #}
+
+	{# START: Types.Functions #}
+	{% for fn in tp.Funcs %}
+		<h4 id="{{fn.Name}}">
+			func 
+			<a target="_blank" href="http{{Secure}}://{{fn.URL}}">{{fn.Name}}</a>
+			<div class="mini icon ui basic buttons"> 
+				<div class="ui button show code" data-target="#collapse_{{fn.Name}}"><i class="code icon"></i></div>
+				{{sg_link(fn.Name)}}
+			</div>
+		</h4>
+		<div class="ui collapse">
+			<div>
+				<pre>{{fn.FmtDecl | safe}}</pre>
+			</div>
+			<div id="collapse_{{fn.Name}}">
+				<pre class="code">{{fn.Code | safe}}</pre>
+			</div>
+		</div>
+
+		{{fn.Doc | safe}}
+
+		{% for ex in fn.Examples %}
+			{{example_detail(ex)}}
+		{% endfor %}
+	{% endfor %}
+	<b></b>
+	{# END: Types.Functions #}
+
+	{# START: Types.Methods #}
+	{% for fn in tp.Methods %}
+		<h4 id="{{fn.FullName}}">
+			func 
+			<a target="_blank" href="http{{Secure}}://{{fn.URL}}">{{fn.Name}}</a> 
+			<div class="mini icon ui basic buttons"> 
+				<div class="ui button show code" data-target="#collapse_{{fn.FullName}}"><i class="code icon"></i></div>
+				{{sg_link(tp.Name|add:"/"|add:fn.Name)}}
+			</div>
+		</h4>
+
+		<div class="ui collapse">
+			<div>
+				<pre>{{fn.FmtDecl | safe}}</pre>
+			</div>
+			<div id="collapse_{{fn.FullName}}">
+				<pre class="code">{{fn.Code | safe}}</pre>
+			</div>
+		</div>
+
+		{{fn.Doc | safe}}
+
+		{% for ex in fn.Examples %}
+			{{example_detail(ex)}}
+		{% endfor %}
+	{% endfor %}
+	{# END: Types.Methods #}
+{% endfor %}
+<b></b>
+{# END: Types #}
+
+{% if IsHasFiles and ViewFilePath != "./" %}
+<h3 id="_files">
+	<a target="_blank" href="http{{Secure}}://{{ViewFilePath}}">Files</a>
+</h3>
+<p>
+	{% for f in Files %}
+		<a target="_blank" href="http{{Secure}}://{{f.BrowseUrl}}">{{f.SrcName}}</a>
+	{% endfor %}
+</p>
+{% endif %}
+
+{{ExportDataSrc|safe}}
