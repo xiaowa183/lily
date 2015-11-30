@@ -1,1 +1,0 @@
-document.write("<h1>Roadmap</h1>\n\n<p>If you find some features are missing in the latest release, and you don&rsquo;t see them on the list, feel free to <a href=\"https://github.com/peachdocs/peach/issues\">file an issue</a>.</p>\n\n<p>List is ordered by the priority of implementation and may be changed:</p>\n\n<ul>\n<li>Versionable (branch and tag)</li>\n</ul>\n")

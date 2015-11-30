@@ -33,6 +33,14 @@ func init() {
 }
 
 func main() {
+	if os.Getppid() != 1 {
+        filePath, _ := filepath.Abs(os.Args[0])
+        cmd := exec.Command(filePath, os.Args[1:]...)
+        cmd.Start()
+        return
+    }
+
+	
 	app := cli.NewApp()
 	app.Name = "Peach"
 	app.Usage = "Modern Documentation Server"
