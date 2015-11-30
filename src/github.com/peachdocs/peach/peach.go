@@ -18,7 +18,10 @@ package main
 import (
 	"os"
 	"runtime"
-
+	
+	"os/exec"
+	"path/filepath"
+	
 	"github.com/codegangsta/cli"
 
 	"github.com/peachdocs/peach/cmd"
