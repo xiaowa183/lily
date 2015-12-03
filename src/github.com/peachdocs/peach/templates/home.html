@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{Tr(Lang, "name")}} - {{Tr(Lang, "tag_line")}}{% endblock %}
+{% block body %}
+	<div class="ui inverted vertical masthead center aligned segment">
+	  {% include Page.NavbarTplPath %}
+
+	  <div class="ui text container">
+	    <img src="/img/favicon.ico" >
+	    <h1 class="ui inverted header">
+	      {{Tr(Lang, "home.title")}}
+	    </h1>
+	    <h2>{{Tr(Lang, "home.tag_line")}}</h2>
+	    <a class="ui huge primary button" href="{{Page.DocsBaseURL}}">{{Tr(Lang, "home.get_started")}} <i class="right arrow icon"></i></a>
+	  </div>
+	</div>
+
+	{% include Page.FooterTplPath %}
+{% endblock %}
