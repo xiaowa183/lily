@@ -2,3 +2,5 @@ bin/
 pkg/
 *.pprof
 *.memprof
+*.exe~
+*.tmp
