@@ -4,3 +4,4 @@ pkg/
 *.memprof
 *.exe~
 *.tmp
+*.exe

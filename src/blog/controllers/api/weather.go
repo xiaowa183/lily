@@ -4,13 +4,15 @@ import (
 	"github.com/astaxie/beego"
 )
 
-type MainController struct {
+type WeatherController struct {
 	beego.Controller
 }
 
-//文章列表
-func (c *MainController) ArticleList() {
+//天气信息
+func (c *WeatherController) Weather() {
 	c.Data["Website"] = "lily.wiki"
-	c.Data["Email"] = "ArticleList"
+	c.Data["Email"] = "WeatherInfo"
 	c.TplNames = "index.tpl"
 }
+
+
